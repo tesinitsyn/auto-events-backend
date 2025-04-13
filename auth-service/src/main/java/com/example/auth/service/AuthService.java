@@ -5,8 +5,10 @@ import com.example.auth.dto.AuthResponse;
 import com.example.auth.entity.UserEntity;
 import com.example.auth.repository.UserRepository;
 import com.example.common.security.JwtUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -25,7 +27,7 @@ public class AuthService {
 
     public void register(AuthRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new RuntimeException("User already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
 
         UserEntity user = new UserEntity(
@@ -38,10 +40,10 @@ public class AuthService {
 
     public AuthResponse login(AuthRequest request) {
         UserEntity user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
         String token = jwtUtils.generate(user.getId());
