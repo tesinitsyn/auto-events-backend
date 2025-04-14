@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+aws:
+  accessKey: test
+  secretKey: test
+  region: us-east-1
+  bucket: test-bucket
+  endpoint: http://localhost:4566
+
+logging:
+  level:
+    root: INFO
+    org.springframework.test.context: WARN
+    org.testcontainers: WARN
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
