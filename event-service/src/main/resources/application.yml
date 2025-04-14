@@ -4,3 +4,26 @@ server:
 spring:
   application:
     name: event-service
+
+aws:
+  accessKey: test
+  secretKey: test
+  region: us-east-1
+  bucket: auto-events-bucket
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["*"]
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
